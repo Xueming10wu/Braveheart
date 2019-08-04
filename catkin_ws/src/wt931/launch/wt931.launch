@@ -1,0 +1,3 @@
+<launch>
+    <node name="wt931_imu" pkg="wt931" type="main.py" />
+</launch>
