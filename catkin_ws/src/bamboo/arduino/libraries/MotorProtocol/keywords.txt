@@ -1,0 +1,27 @@
+#class (KEYWORD1)
+MotorProtocol	KEYWORD1
+ 
+
+#function and method (KEYWORD2)
+encode	        KEYWORD2
+decode	        KEYWORD2
+setLeft         KEYWORD2
+setRight        KEYWORD2
+getLeft         KEYWORD2
+getRight        KEYWORD2
+getSumSize      KEYWORD2
+ 
+ 
+#constant (LITERAL1)
+txBuffer  	    LITERAL1
+left            LITERAL1
+right           LITERAL1
+start_size      LITERAL1
+left_H_size     LITERAL1
+left_L_size     LITERAL1
+right_H_size    LITERAL1
+right_L_size    LITERAL1
+stop_size       LITERAL1
+sum_size        LITERAL1
+rxBuffer        LITERAL1
+rxIndex         LITERAL1
