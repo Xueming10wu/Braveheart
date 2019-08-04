@@ -1,0 +1,758 @@
+<robot name="bamboo_description">
+
+<link name="base_link">
+    <visual>
+      <origin xyz="-0.0857 0.0857 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/base.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.3 0.9 0.97 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0857 0.0857 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/base.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="joint_1" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0.0589" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="link_2" />
+
+  </joint>
+
+<link name="link_2">
+    <visual>
+      <origin xyz="0 -0.0099 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/side.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.8 0.9 0.9" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0099 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/side.STL" />
+      </geometry>
+    </collision>
+  </link>
+<joint name="link2_servo3" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0019"/>
+    <parent link="link_2"/>
+    <child link="servo_3"/>
+  </joint>
+
+<link name="servo_3">
+    <visual>
+      <origin xyz="-0.0262 0.0100 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.9 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0262 0.0100 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="joint_2" type="revolute">
+    <axis xyz="1 0 0" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0.0099" rpy="0 0 0" />
+    <parent link="servo_3" />
+    <child link="link_4" />
+  </joint>
+
+<link name="link_4">
+    <visual>
+      <origin xyz="-0.0270 -0.0124 0.0502" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/long_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0.7 0.3 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0270 -0.0124 0.0502" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/long_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+<joint name="link4_link5" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0524"/>
+    <parent link="link_4"/>
+    <child link="link_5"/>
+  </joint>
+ 
+<link name="link_5">
+    <visual>
+      <origin xyz="0.0395 -0.01605 0.0375" rpy="3.14 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79608 0.82353 0.93725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0395 -0.01605 0.0375" rpy="3.14 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+<joint name="link5_servo6" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.047"/>
+    <parent link="link_5"/>
+    <child link="servo_6"/>
+  </joint>
+
+<link name="servo_6">
+    <visual>
+      <origin xyz="0.0380 -0.0100 -0.0431" rpy="1.57 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 1 0.4 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0380 -0.0100 -0.0431" rpy="1.57 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+<joint name="joint_3" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="servo_6" />
+    <child link="link_7" />
+  </joint>
+
+<link name="link_7">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.9 0.7 0.5 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+    </collision>
+ </link>
+
+<joint name="link7_servo_8" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0368"/>
+    <parent link="link_7"/>
+    <child link="servo_8"/>
+ </joint>
+
+<link name="servo_8">
+    <visual>
+      <origin xyz="-0.0262 0.0100 0.0103" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.9 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0262 0.0100 0.0103" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+    </collision>
+ </link>
+
+
+
+
+<joint name="joint_4" type="revolute">
+    <axis xyz="1 0 0" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0.0099" rpy="0 0 0" />
+    <parent link="servo_8" />
+    <child link="link_9" />
+  </joint>
+
+<link name="link_9">
+    <visual>
+      <origin xyz="-0.0270 -0.0124 0.0502" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/long_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0.7 0.3 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0270 -0.0124 0.0502" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/long_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="link9_link10" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0524"/>
+    <parent link="link_9"/>
+    <child link="link_10"/>
+  </joint>
+ 
+<link name="link_10">
+    <visual>
+      <origin xyz="0.0395 -0.01605 0.0375" rpy="3.14 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79608 0.82353 0.93725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0395 -0.01605 0.0375" rpy="3.14 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+<joint name="link10_servo11" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.047"/>
+    <parent link="link_10"/>
+    <child link="servo_11"/>
+  </joint>
+
+<link name="servo_11">
+    <visual>
+      <origin xyz="0.0380 -0.0100 -0.0431" rpy="1.57 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 1 0.4 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0380 -0.0100 -0.0431" rpy="1.57 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+<joint name="joint_5" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="servo_11" />
+    <child link="link_12" />
+  </joint>
+
+<link name="link_12">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.9 0.7 0.5 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+    </collision>
+ </link>
+
+<joint name="link12_servo_13" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0368"/>
+    <parent link="link_12"/>
+    <child link="servo_13"/>
+ </joint>
+
+<link name="servo_13">
+    <visual>
+      <origin xyz="-0.0262 0.0100 0.0103" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.9 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0262 0.0100 0.0103" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+    </collision>
+ </link>
+
+
+
+<joint name="joint_6" type="revolute">
+    <axis xyz="1 0 0" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 -0.0006" rpy="0 0 0" />
+    <parent link="servo_13" />
+    <child link="link_14" />
+  </joint>
+
+<link name="link_14">
+    <visual>
+      <origin xyz="-0.0269 -0.0124 0.0307" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/short_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.1 0.4 0.7 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0269 -0.0124 0.0307" rpy="3.14 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/short_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="link14_link15" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0335"/>
+    <parent link="link_14"/>
+    <child link="link_15"/>
+  </joint>
+ 
+<link name="link_15">
+    <visual>
+      <origin xyz="0.0395 -0.01605 0.0375" rpy="3.14 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79608 0.82353 0.93725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0395 -0.01605 0.0375" rpy="3.14 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+<joint name="link15_servo16" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.047"/>
+    <parent link="link_15"/>
+    <child link="servo_16"/>
+  </joint>
+
+<link name="servo_16">
+    <visual>
+      <origin xyz="0.0380 -0.0100 -0.0431" rpy="1.57 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 1 0.4 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0380 -0.0100 -0.0431" rpy="1.57 0 3.14" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<!--
+<joint name="servo6_link7" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="servo_6" />
+    <child link="link_7" />
+  </joint>
+
+ <link name="link_7">
+    <visual>
+      <origin xyz="-0.0124 -0.0269 0.0018" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/short_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.1 0.4 0.7 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0124 -0.0269 0.0018" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/short_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="link7_servo8" type="revolute">
+    <axis xyz="0 1 0" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0.03186" rpy="0 0 0" />
+    <parent link="link_7" />
+    <child link="servo_8" />
+  </joint>
+
+<link name="servo_8">
+    <visual>
+      <origin xyz="0.0099 -0.0257 -0.0101" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.9 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0099 -0.0257 -0.0101" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="servo8_link9" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0322"/>
+    <parent link="servo_8"/>
+    <child link="link_9"/>
+  </joint>
+
+<link name="link_9">
+    <visual>
+      <origin xyz="0 0 0" rpy="-1.57 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.9 0.7 0.5 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="-1.57 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+    <joint name="link9_link10" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0"/>
+    <parent link="link_9"/>
+    <child link="link_10"/>
+  </joint>
+
+  <link name="link_10">
+    <visual>
+      <origin xyz="0.01605 0.0395 0.0375" rpy="3.14 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79608 0.82353 0.93725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.01605 0.0395 0.0375" rpy="3.14 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="link10_servo11" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.047"/>
+    <parent link="link_10"/>
+    <child link="servo_11"/>
+  </joint>
+
+  <link name="servo_11">
+    <visual>
+      <origin xyz="0.0100 0.0380 -0.0431" rpy="1.57 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 1 0.4 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0100 0.0380 -0.0431" rpy="1.57 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="servo11_link12" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="servo_11" />
+    <child link="link_12" />
+  </joint>
+
+ <link name="link_12">
+    <visual>
+      <origin xyz="-0.0124 -0.0269 0.0018" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/short_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.1 0.4 0.7 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0124 -0.0269 0.0018" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/short_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  
+<joint name="link12_servo13" type="revolute">
+    <axis xyz="0 1 0" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0.03186" rpy="0 0 0" />
+    <parent link="link_12" />
+    <child link="servo_13" />
+  </joint>
+
+<link name="servo_13">
+    <visual>
+      <origin xyz="0.0099 -0.0257 -0.0101" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.9 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0099 -0.0257 -0.0101" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<joint name="servo13_link14" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0322"/>
+    <parent link="servo_13"/>
+    <child link="link_14"/>
+  </joint>
+
+<link name="link_14">
+    <visual>
+      <origin xyz="0 0 0" rpy="-1.57 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.9 0.7 0.5 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="-1.57 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/narrow_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+    <joint name="link14_link15" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0"/>
+    <parent link="link_14"/>
+    <child link="link_15"/>
+  </joint>
+
+  <link name="link_15">
+    <visual>
+      <origin xyz="0.01605 0.0395 0.0375" rpy="3.14 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79608 0.82353 0.93725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.01605 0.0395 0.0375" rpy="3.14 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_mount_x.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="link15_servo16" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.047"/>
+    <parent link="link_15"/>
+    <child link="servo_16"/>
+  </joint>
+
+  <link name="servo_16">
+    <visual>
+      <origin xyz="0.0100 0.0380 -0.0431" rpy="1.57 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 1 0.4 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0100 0.0380 -0.0431" rpy="1.57 0 -1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="servo16_link17" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="servo_16" />
+    <child link="link_17" />
+  </joint>
+
+  <link name="link_17">
+    <visual>
+      <origin xyz="0.0124 0.0270 0" rpy="3.14 3.14 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/long_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.9 0.1 0.2 0.7" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0124 0.0270 0" rpy="3.14 3.14 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/long_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+
+-->
+<!--
+<link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/wide_U.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0.7 0.3 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="-1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/wide_U.STL" />
+      </geometry>
+    </collision>
+  </link>
+-->
+<!--link
+<link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/base.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0.7 0.3 0.5" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="-1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/base.STL" />
+      </geometry>
+    </collision>
+  </link>
+-->
+<!--joint
+<joint name="servo6_link7" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="servo_6" />
+    <child link="link_7" />
+  </joint>
+-->
+<!--
+<link name="servo_3">
+    <visual>
+      <origin xyz="0.0099 -0.0257 0.0101" rpy="0 0 1.57" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.7 0.9 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="-1.57 0 0" />
+      <geometry>
+        <mesh filename="package://bamboo_description/meshes/servo_dual_shaft.STL" />
+      </geometry>
+    </collision>
+  </link>
+-->
+
+</robot>
