@@ -39,10 +39,36 @@ int main(int argc, char *argv[])
     ArmProtocol protocol = ArmProtocol();
 
     usleep(1000000);
+
+    //读取舵机测试
     //int position = protocol.readJoint(serialPort, 7);
     //cout << "position is :" << position << endl;
 
+
+    //串口实例  舵机号  脉宽  时间 
     protocol.writeJoint(serialPort, 7, 1500, 100);
+
+    //串口实例  舵机号  脉宽  时间 
+    protocol.writeJoint(serialPort, 7, 1500, 100);
+    
+    //写多个舵机的脉宽(角度)  返回是否成功    参数: 串口实例  数组长度  舵机号组  脉宽组  时间 
+    int count = 7;
+    int* joint_unit = new int[count];
+    int* width_unit = new int[count];
+    int duration = 500;
+
+    for (size_t i = 1; i <= count; i++)
+    {
+        joint_unit[i] = i;
+    }
+
+    for (size_t i = 0; i < count; i++)
+    {
+        width_unit[i] = 1500;
+    }
+    
+    protocol.writeMulJoint(serialPort , count, joint_unit, width_unit, duration );
+
 
     /*
     while (true)

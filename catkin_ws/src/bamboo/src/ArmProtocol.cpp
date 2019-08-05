@@ -183,6 +183,43 @@ int ArmProtocol::writeJoint( Serial &serialport, int joint_id, int puls_width, i
 }
 
 
+int ArmProtocol::writeMulJoint(Serial & serialport, int count, int* joint_id, int* puls_width, int duration )
+{
+    stringstream ss;
+
+    for (size_t i = 0; i < count; i++)
+    {
+        ss << "#" << joint_id[i] << "P" << puls_width[i];
+    }
+    
+    ss << "T" << duration << "\r\n" ;
+    string txstring = ss.str();
+
+    char *tx_char = (char *)txstring.c_str();
+    KeyTX = strlen(tx_char);
+    cout << "len " << KeyTX << " " << txstring;
+
+    for (size_t i = 0; i < KeyTX; i++)
+    {
+         txBuffer[i] = (uint8_t)tx_char[i];
+    }
+
+    int txnum = serialport.write(txBuffer, KeyTX);
+    if (txnum != KeyTX)
+    {
+        cout << "writeJoint write failed :" << endl;
+        return 0;
+    }
+    else
+    {
+        cout << "writeJoint write success !" << endl;
+    }
+    return 1;
+}
+
+
+
+
 void ArmProtocol::flushTxBuffer()
 {
     for (size_t i = 0; i < bufferSize - 1; i++)
