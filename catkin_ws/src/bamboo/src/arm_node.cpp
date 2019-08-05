@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     //串口设置
     int baudrate = 115200;
-    const string port = "/dev/ttyUSB1";
+    const string port = "/dev/ttyUSB3";
     Timeout timeout = Timeout::simpleTimeout(1000);
     Serial serialPort(port, baudrate, timeout);
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     for (size_t i = 1; i <= count; i++)
     {
-        joint_unit[i] = i;
+        joint_unit[i - 1] = i;
     }
 
     for (size_t i = 0; i < count; i++)

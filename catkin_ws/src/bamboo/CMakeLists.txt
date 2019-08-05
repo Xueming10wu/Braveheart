@@ -12,6 +12,10 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   serial
   std_msgs
+  geometry_msgs
+  tf
+  joy
+  robot_state_publisher
 )
 
 ## System dependencies are found with CMake's conventions
@@ -213,7 +217,9 @@ target_link_libraries(arm_node
 
 
 add_executable(motor_node
+  include/bamboo/BambooMotor.h
   include/bamboo/MotorProtocol.h
+  src/BambooMotor.cpp
   src/MotorProtocol.cpp
   src/motor_node.cpp
 )

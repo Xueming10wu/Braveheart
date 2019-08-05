@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Bamboo -->
+  <arg name="serialport_name" default="/dev/arduino_due" /><!--串口名-->
+  <arg name="baudrate" default="9600" /><!--波特率-->
+  <arg name="reduction" default="36" /><!--电机减速比-->
+  <arg name="wheel_radius" default="0.05" /><!--轮子半径 m-->
+  <arg name="base_width" default="0.30" /><!--轮子间距 m-->
+  <arg name="left_direction" default="1" /><!--轮子方向，用于调整正反转-->
+  <arg name="right_direction" default="1" /><!--轮子方向，用于调整正反转-->
+  <arg name="PPR" default="11" /><!--编码器线数-->
+  <arg name="QPR" default="44" /><!--PPR*4  编码器转一圈获得脉冲数量-->
+
+
+  <node pkg="bamboo" type="motor_node" name="bamboo_motor_node">
+    <param name="serialport_name" type="string" value="$(arg serialport_name)"/>
+    <param name="baudrate" type="int" value="$(arg baudrate)"/>
+    <param name="reduction" type="int" value="$(arg reduction)"/>
+    <param name="wheel_radius" type="double" value="wheel_radius"/>
+    <param name="base_width" type="double" value="base_width"/>
+    <param name="left_direction" type="int" value="left_direction"/>
+    <param name="right_direction" type="int" value="right_direction"/>
+    <param name="PPR" type="int" value="PPR"/>
+    <param name="QPR" type="int" value="QPR"/>
+  </node>
+</launch>
