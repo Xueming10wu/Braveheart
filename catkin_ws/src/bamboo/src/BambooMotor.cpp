@@ -7,7 +7,7 @@ BambooMotor::BambooMotor():PI(3.1415926)
     nh_private.param<string>("serialport_name", serialport_name, "/dev/arduino_due");
     nh_private.param<int>("baudrate", baudrate, 9600);
     nh_private.param<int>("reduction" ,reduction , 36);
-    nh_private.param<double>("wheel_radius" ,wheel_radius , 0.05);
+    nh_private.param<double>("wheel_radius" ,wheel_radius , 0.02);
     nh_private.param<double>("base_width" ,base_width , 0.30);
     nh_private.param<int>("wheel_left_direction" ,wheel_left_direction , 1 );
     nh_private.param<int>("wheel_right_direction" ,wheel_right_direction , 1 );
@@ -21,8 +21,8 @@ BambooMotor::BambooMotor():PI(3.1415926)
     serialPort = new Serial(serialport_name, baudrate, timeout);
 
     //检查串口是否正常
-    if(serialPort->isOpen()){cout << " serialPort isOpen." << endl;}
-    else{cout << " serialPort Opened failed" << endl;return;}
+    if(serialPort->isOpen()){cout << "SerialPort isOpen." << endl;}
+    else{cout << "SerialPort Opened failed" << endl;return;}
 
     //通信协议初始化
     protocol = new MotorProtocol();
@@ -35,18 +35,18 @@ BambooMotor::BambooMotor():PI(3.1415926)
 
     //发布者 接收者 初始化
     pub_odom = nh.advertise<nav_msgs::Odometry>("odom", 10);
-    sub_speed = nh.subscribe("/cmd_vel", 10, &BambooMotor::cmdVelCallBack, this);
+    sub_speed = nh.subscribe("/cmd_vel", 1, &BambooMotor::cmdVelCallBack, this);
 
     // ros 时钟控制
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(20);
     time_prev = ros::Time::now();
     time_current = ros::Time::now();
 
     //ros消息 坐标系等初始化
     tf_transform.header.frame_id = "odom";
-    tf_transform.child_frame_id = "base_link";
+    tf_transform.child_frame_id = "base_footprint";
     odom.header.frame_id = "odom";
-    odom.child_frame_id= "base_link";
+    odom.child_frame_id= "base_footprint";
 
 
     //里程计和姿态积分   长度单位 m  角度为 弧度角 即 旋转3.14为旋转半圈
@@ -62,13 +62,6 @@ BambooMotor::BambooMotor():PI(3.1415926)
 	tf_x = 0; tf_y = 0; tf_theta = 0;
 	//初始位置下 机器人中心在x方向上移动的距离，机器人的左右轮子移动的距离
 	tf_distance = 0; tf_left = 0; tf_right = 0;
-
-
-    //机器人当前的位置和姿态信息  相对于初始位置
-    tf_x = 0;
-    tf_y = 0;
-    tf_theta = 0;
-
 
     //读串口设置
     //收数据缓存区
@@ -100,7 +93,7 @@ BambooMotor::BambooMotor():PI(3.1415926)
                     {
                         //读取解码后的具体数据，解析完成后才能发送数据
                         publishOdom();
-                        cout << "receive data  " << protocol->getLeft() << "  " << protocol->getRight() << endl;
+                        //cout << "receive data  " << protocol->getLeft() << "  " << protocol->getRight() << endl;
                     }
                 }
             }
@@ -116,7 +109,31 @@ BambooMotor::BambooMotor():PI(3.1415926)
 }
 
 BambooMotor::~BambooMotor()
-{}
+{
+    //最后给下位机发送停止指令
+    //写串口
+    //将数据封装到通讯协议里面
+    protocol->setLeft(0);
+    protocol->setRight(0);
+    if (protocol->encode())
+    {   
+        for (size_t i = 0; i < 10; i++)
+        {
+            try
+            {
+                //检查串口数据输出缓存区状态
+                int txnum = serialPort->write(protocol->txBuffer, protocol->getSumSize());
+                //将协议封装好的数据写入串口中
+                cout << "wrote stop  :" << txnum << endl;
+            }
+            catch (exception e)
+            {
+                cout << "stop failed at " << i << " time " << endl; 
+            }
+        }
+    }
+
+}
 
 
 //回调函数
@@ -128,15 +145,18 @@ void BambooMotor::cmdVelCallBack(const geometry_msgs::Twist & msg)
 
 
     //加上旋转的速度    线速度 = 角速度 * 半径， 然后分摊到左右两边
-    speed_l += (wheel_left_direction * msg.angular.z * base_width/2) / 2;
-    speed_r -= (wheel_right_direction * msg.angular.z * base_width/2) / 2;
-    ROS_INFO("Set speed left: %f, right: %f", speed_l, speed_r);
+    speed_l -= (wheel_left_direction * msg.angular.z * base_width/2) / 2;
+    speed_r += (wheel_right_direction * msg.angular.z * base_width/2) / 2;
 
+    //cout << "Set speed_l " <<speed_l <<  ", speed_r: "<< speed_r << endl;
 
     //速度转化为目标脉冲数
-    int left_except_pulse = encoder_left_direction * round(speed_l / QPR); 
-    int right_except_pulse = encoder_right_direction * round(speed_r / QPR);
-    
+    //速度 = ((脉冲数 / QPR)/减速比) *PI * 直径
+    //脉冲数 = 速度* 减速比 * QPR/(PI*直径)
+    int left_except_pulse = encoder_left_direction * round( 0.1 * speed_l * reduction * QPR /(2 * PI * wheel_radius)); 
+    int right_except_pulse = encoder_right_direction * round( 0.1 * speed_r * reduction * QPR /(2 * PI * wheel_radius));
+    //ROS_INFO("Set speed left_except_pulse: %f, right_except_pulse: %f", left_except_pulse, right_except_pulse);
+    cout << "Set speed left_except_pulse: " <<left_except_pulse <<  ", right_except_pulse: "<< right_except_pulse << endl;
     //写串口
     //将数据封装到通讯协议里面
     protocol->setLeft(left_except_pulse);
@@ -171,19 +191,25 @@ void BambooMotor::publishOdom()
     right_encoder += dright_encoder;
 
     //单位时间下机器人中心在x方向上移动的距离，单位时间下机器人的左右轮子移动的距离
-    dleft = wheel_left_direction * dleft_encoder * reduction / QPR;
-    dright = wheel_left_direction * dright_encoder * reduction / QPR;
+    dleft = wheel_left_direction * 2 * PI * wheel_radius * dleft_encoder / (reduction * QPR);
+    dright =  wheel_right_direction * 2 * PI * wheel_radius * dright_encoder / (reduction * QPR);
     d = (dleft + dright) / 2;
-
+    
     //轮子运动的距离
-    tf_left = wheel_left_direction * left_encoder * reduction / QPR;
-    tf_right = wheel_left_direction * right_encoder * reduction / QPR;
+    tf_left = wheel_left_direction * 2 * PI * wheel_radius * left_encoder  /(reduction * QPR);
+    tf_right = wheel_right_direction * 2 * PI * wheel_radius * right_encoder /(reduction * QPR);
     tf_distance = (tf_left + tf_right)/2;
+    //cout<< "d     tf_distance  " << d << "  " << tf_distance << endl;
+    //ROS_INFO("d : %f,  tf_distance : %f", d, tf_distance);
 
     //转角  z轴正方向
     dtheta = (dright - dleft) / base_width;
     tf_theta += dtheta;
+
+    //cout<< "dtheta  tf_theta   " << dtheta << "  " << tf_theta << endl;
+    //ROS_INFO("dtheta : %f,  tf_theta : %f", dtheta, tf_theta);
     
+
     //有数据时候才能进行角度变换
     if (d != 0)
     {
@@ -193,25 +219,11 @@ void BambooMotor::publishOdom()
         tf_y += dx*sin(tf_theta) + dy*cos(tf_theta);
     }
     
-    
-    
-    //单位时间从下位机读取编码器的数据  数据为 QPR，即PPR*4
-    int dleft_encoder, dright_encoder;
-    //单位时间下机器人的姿态变化  坐标系为 前一时刻机器人坐标系
-    double dx, dy, dtheta;
-    //单位时间下机器人中心在x方向上移动的距离，单位时间下机器人的左右轮子移动的距离
-    double d, dleft, dright;
-	//初始位置下 编码器的数据
-	long long left_encoder, right_encoder;
-	//初始位置下 机器人的姿态
-	long double tf_x, tf_y, tf_theta;
-	//初始位置下 机器人中心在x方向上移动的距离，机器人的左右轮子移动的距离
-	long double tf_distance, tf_left, tf_right;
-
     //获取时间
     time_current = ros::Time::now();
     double elapsed = (time_current - time_prev).toSec();
     time_prev = time_current;
+    //cout << "elapsed  " << elapsed << endl;
 
     // 发布 tf 信息
     geometry_msgs::Quaternion odom_quaternion = tf::createQuaternionMsgFromYaw(tf_theta);
@@ -222,13 +234,20 @@ void BambooMotor::publishOdom()
     tf_broadcaster.sendTransform(tf_transform);
 
     // 发布里程计信息
-    odom.header.stamp = time_current;
+    odom.header.stamp = ros::time_current;
     odom.pose.pose.position.x = tf_x;
     odom.pose.pose.position.y = tf_y;
     odom.pose.pose.orientation = odom_quaternion;
     odom.twist.twist.linear.x = d / elapsed;
     odom.twist.twist.angular.z = dtheta / elapsed;
+
+    //cout << "linear.x  angular.z  " << odom.twist.twist.linear.x << " " << odom.twist.twist.angular.z << endl;
     pub_odom.publish(odom);
 
-
+    //数据清零
+    dleft_encoder = 0; dright_encoder = 0;
+    dleft = 0; dright = 0; d=0;
+    dtheta = 0;
+    dx = 0; dy = 0;
+    
 }//发布者函数结束
